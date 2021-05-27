@@ -1,5 +1,6 @@
 # Bodyfat
-Investigating a bodyfat dataset of 88 males 
+Investigating a bodyfat dataset of 88 males.
+Overall goal - see what features should be kept in a model.
 
 Data originally published by https://ww2.amstat.org/publications/jse/v4n1/datasets.johnson.html
 
