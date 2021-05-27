@@ -1,7 +1,7 @@
 ---
 title: "bodyfat"
 author: "Shannon O’Hare-Gannon"
-date: "5/26/2021"
+date: "14/03/2019"
 output: html_document
 ---
 ### The data consists of observations taken on a sample of 88 males. In this project, I will look at principal components analysis (PCA) of the variables variables were measured: Neck circumference (cm), Abdomen circumference (cm), Knee circumference (cm), Ankle circumference (cm)
