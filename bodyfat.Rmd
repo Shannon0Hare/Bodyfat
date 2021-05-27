@@ -1,0 +1,137 @@
+---
+title: "bodyfat"
+author: "Shannon O’Hare-Gannon"
+date: "5/26/2021"
+output: html_document
+---
+### The data consists of observations taken on a sample of 88 males. In this project, I will look at principal components analysis (PCA) of the variables variables were measured: Neck circumference (cm), Abdomen circumference (cm), Knee circumference (cm), Ankle circumference (cm)
+
+
+```{r}
+setwd("~/Documents/College/Maths/ST464 - ML/DataSets")
+bfat <- read.table("bodyfat.csv", header = T)
+bfat <- bfat[,c("neck","abdomen", "knee", "ankle")]
+head(bfat)
+```
+```{r}
+
+```
+
+#### Using pairs to construct a scatterplot matrix - Are there any outliers?
+```{r}
+pairs(bfat)
+```
+```{r}
+
+```
+
+#### From the above it can be observed that Possible Outliers = 31, 84.
+
+### PCA:
+
+```{r}
+apply(bfat, 2, var)
+```
+#### Since the variances are considerably different, scale the data
+```{r}
+pbfat <- prcomp(bfat, scale = T)
+pbfat
+
+```
+#### Summary:
+```{r}
+summary(pbfat)
+```
+```{r}
+
+```
+
+#### 66.29% is the variability accounted for by the first component. For the first two together: 85.35%
+#### This can be verified by looking at a screeplot
+```{r}
+screeplot <- function(p) { 
+  e <- p$sdev ^ 2
+  e <- e / sum(e)
+    plot(
+      1:length(e),
+      e,
+      xlab = "Component number",
+    pch = 20,
+    ylab = "Variance proportion",
+    main = "Scree plot",
+    axes = F,
+    ylim = c(0, max(e)*1.04)
+  )
+  lines(1:length(e), e)
+  axis(1, at = 1:length(e))
+  axis(2)
+}
+```
+
+```{r}
+screeplot(pbfat)
+```
+```{r}
+
+```
+
+#### From the screeplot, the first two principal components should be used as they explain approx 85.35% of the variability in the dataset.
+
+
+#### Can use a bi-plot to help interpret the components
+```{r}
+biplot(pbfat, scale = 0, cex=c(.75,.75))
+```
+```{r}
+
+```
+
+
+
+
+#### - The first component is .53 neck + .54 abdomen + .55 knee + .37 ankle where the variables are scaled. It is mostly a measure of the overall bodyfat. (High body fat measurements score high in PC1).
+#### - The second compenent gives most weight to ankle and ankle is negative. (High ankle measurements will score low in PC2).
+#### - Outliers = 31, 84. These have high body fat and very high ankle measurements. From the biplot:
+#### - Top left: low overall body and ankle fat.
+#### - Top right: high overall body fat, low ankle fat.
+#### - Bottom left: low overall body fat, high ankle fat.
+#### - Bottom right: high overall body fat and high ankle fat.
+#### - It is worth noting that the arrows for abdomen, neck and knee are close together showing correlation between them.
+
+
+### Ommiting the outliers, repeating the process
+```{r}
+bfat2<-bfat[-c(31,84),]
+pbfat1 <- prcomp(bfat2, scale = T)
+pbfat1
+summary(pbfat1)
+
+```
+```{r}
+
+```
+
+#### 73.84% is the variability accounted for by the first component. For the first two together: 86.75%
+
+```{r}
+screeplot(pbfat1)
+```
+```{r}
+
+```
+
+#### From the screeplot, the first two principal components should be used again as this time they explain approx 86.75% of the variability in the dataset.
+
+```{r}
+biplot(pbfat1, cex=c(.75,.75))
+```
+```{r}
+
+```
+
+####
+#### - As above, the first component appears to measure overall body fat, however the second component now appears to be contrasting upper and lower body fat measurements. Those with high lower body fat measurments score low on PC2.
+#### - Top left: low overall body and lower ankle fat.
+#### - Top right: high overall body fat, lower ankle fat.
+#### - Bottom left: low overall body fat, high but lower ankle fat. Bottom right: high overall body fat and high but lower ankle fat.
+#### - Neck and abdomen still appear to be correlated.
